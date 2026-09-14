@@ -15,8 +15,8 @@ export default defineConfig({
         background_color: "#1a1410",
         display: "standalone",
         orientation: "any",
-        start_url: "/",
-        scope: "/",
+        start_url: "/go-3d/",
+        scope: "/go-3d/",
         categories: ["games", "education"],
         icons: [
           { src: "icons/icon-192.png", sizes: "192x192", type: "image/png" },
@@ -36,7 +36,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,svg,png,webmanifest,ico}"],
-        navigateFallback: "/index.html",
+        navigateFallback: "/go-3d/index.html",
       },
     }),
   ],
