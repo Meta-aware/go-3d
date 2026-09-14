@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="theme-color" content="#1a1410" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Go 3D" />
+    <meta
+      name="description"
+      content="Play Go (Weiqi / Baduk) in 3D. Local hotseat, a simple AI, and interactive lessons."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <title>Go 3D — Weiqi &amp; Baduk</title>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="scene"></canvas>
+
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-jp" aria-hidden="true">囲碁</span>
+          <div class="brand-text">
+            <strong>Go 3D</strong>
+            <small>Weiqi · Baduk</small>
+          </div>
+        </div>
+        <div class="status" id="status">
+          <div class="turn-pill" id="turn-pill">
+            <span class="stone-dot black" id="turn-dot"></span>
+            <span id="turn-label">Black to play</span>
+          </div>
+          <div class="caps" aria-label="Captures">
+            <span class="cap"><i class="stone-dot black sm"></i> <b id="cap-b">0</b></span>
+            <span class="cap"><i class="stone-dot white sm"></i> <b id="cap-w">0</b></span>
+          </div>
+        </div>
+      </header>
+
+      <aside class="chip-rail" aria-label="Game options">
+        <div class="chips" id="mode-chips" role="tablist">
+          <button class="chip active" data-mode="hotseat" type="button">Hotseat</button>
+          <button class="chip" data-mode="ai" type="button">vs AI</button>
+          <button class="chip" data-mode="teach" type="button">Teach Me</button>
+        </div>
+        <div class="chips" id="size-chips">
+          <button class="chip active" data-size="9" type="button">9×9</button>
+          <button class="chip" data-size="13" type="button">13×13</button>
+          <button class="chip" data-size="19" type="button">19×19</button>
+        </div>
+        <div class="chips" id="camera-chips">
+          <button class="chip active" data-cam="dramatic" type="button">Dramatic</button>
+          <button class="chip" data-cam="top" type="button">Top</button>
+          <button class="chip" data-cam="piece" type="button">Piece</button>
+          <button class="chip ghost" id="btn-reset-cam" type="button">Reset</button>
+        </div>
+      </aside>
+
+      <section class="teach-panel hidden" id="teach-panel" aria-live="polite">
+        <div class="teach-head">
+          <h2 id="teach-title">Liberties</h2>
+          <span class="teach-step" id="teach-step">1 / 4</span>
+        </div>
+        <p id="teach-body">A stone needs empty adjacent points — liberties — to stay on the board.</p>
+        <div class="teach-lessons" id="teach-lessons"></div>
+        <div class="teach-nav">
+          <button class="btn" id="btn-teach-prev" type="button">Back</button>
+          <button class="btn primary" id="btn-teach-next" type="button">Next</button>
+        </div>
+        <p class="teach-hint" id="teach-hint"></p>
+      </section>
+
+      <footer class="toolbar">
+        <button class="btn" id="btn-pass" type="button">Pass</button>
+        <button class="btn" id="btn-resign" type="button">Resign</button>
+        <button class="btn" id="btn-undo" type="button">Undo</button>
+        <button class="btn" id="btn-new" type="button">New</button>
+        <button class="btn ghost" id="btn-coords" type="button" aria-pressed="false">A1</button>
+      </footer>
+
+      <div class="toast hidden" id="toast" role="status"></div>
+
+      <div class="sheet hidden" id="result-sheet" role="dialog" aria-modal="true" aria-labelledby="result-title">
+        <div class="sheet-card">
+          <h2 id="result-title">Game over</h2>
+          <p id="result-body"></p>
+          <div class="score-grid" id="score-grid"></div>
+          <p class="muted" id="score-help">
+            In scoring, tap groups to mark them dead, then confirm.
+          </p>
+          <div class="sheet-actions">
+            <button class="btn primary" id="btn-confirm-score" type="button">Confirm score</button>
+            <button class="btn" id="btn-result-new" type="button">New game</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sheet hidden" id="confirm-sheet" role="dialog" aria-modal="true">
+        <div class="sheet-card">
+          <h2 id="confirm-title">Start a new game?</h2>
+          <p id="confirm-body">The current position will be discarded.</p>
+          <div class="sheet-actions">
+            <button class="btn" id="btn-confirm-no" type="button">Cancel</button>
+            <button class="btn primary" id="btn-confirm-yes" type="button">New game</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
