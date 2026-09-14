@@ -29,7 +29,6 @@ def clamp(v: float) -> int:
 def draw_icon(size: int, maskable: bool = False) -> bytes:
     px = bytearray(size * size * 4)
     cx = cy = size / 2
-    # padding for maskable safe zone (~80%)
     board_r = size * (0.38 if maskable else 0.42)
     for y in range(size):
         for x in range(size):
@@ -37,25 +36,20 @@ def draw_icon(size: int, maskable: bool = False) -> bytes:
             dx = x - cx + 0.5
             dy = y - cy + 0.5
             dist = math.hypot(dx, dy)
-            # background
             if maskable:
                 r, g, b = 26, 20, 16
             else:
-                # soft vignette
                 t = dist / (size * 0.72)
                 r = clamp(32 - t * 10)
                 g = clamp(24 - t * 8)
                 b = clamp(18 - t * 6)
 
-            # wooden board square
             half = board_r
             if abs(dx) < half and abs(dy) < half:
-                # wood grain-ish
                 grain = 0.5 + 0.5 * math.sin((dy + math.sin(dx * 0.08) * 4) * 0.35)
                 r = clamp(170 + grain * 40)
                 g = clamp(120 + grain * 28)
                 b = clamp(70 + grain * 14)
-                # grid
                 local_x = (dx + half) / (2 * half)
                 local_y = (dy + half) / (2 * half)
                 gx = abs((local_x * 8) % 1 - 0.5)
@@ -63,7 +57,6 @@ def draw_icon(size: int, maskable: bool = False) -> bytes:
                 if gx < 0.035 or gy < 0.035:
                     r, g, b = 40, 28, 16
 
-            # black stone
             sx, sy = -size * 0.12, -size * 0.08
             sd = math.hypot(dx - sx, dy - sy)
             if sd < size * 0.14:
@@ -72,7 +65,6 @@ def draw_icon(size: int, maskable: bool = False) -> bytes:
                 v = 18 + shade * 30 + hl * 90
                 r = g = b = clamp(v)
 
-            # white stone
             sx2, sy2 = size * 0.12, size * 0.1
             sd2 = math.hypot(dx - sx2, dy - sy2)
             if sd2 < size * 0.14:
@@ -83,7 +75,6 @@ def draw_icon(size: int, maskable: bool = False) -> bytes:
                 g = clamp(v - 4)
                 b = clamp(v - 10)
 
-            # rounded mask for non-maskable
             alpha = 255
             if not maskable:
                 corner = size * 0.18
@@ -110,7 +101,6 @@ def main() -> None:
         write_png(OUT / name, size, size, draw_icon(size, maskable))
         print("wrote", name)
 
-    # favicon svg
     (ROOT / "public" / "favicon.svg").write_text(
         """<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 64 64\">
   <rect width=\"64\" height=\"64\" rx=\"14\" fill=\"#1a1410\"/>
